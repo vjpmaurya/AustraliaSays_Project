@@ -1,0 +1,66 @@
+﻿@model AustraliyaDemo.Entity.Article
+@{
+    ViewData["Title"] = "EditArticle";
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+
+<h1 style=" text-decoration: none; color: #008CBA;">EditArticle</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-sm-6 box">
+            <form asp-action="EditArticle" method="post" enctype="multipart/form-data">
+                <label>Site Name</label>
+                <input asp-for="Id" type="hidden" />
+                <input asp-for="UserId" type="hidden" />
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <select class="form-control" asp-for="SiteId">
+                            <option>--Select Site Name--</option>
+                            @if (ViewBag.Site != null)
+                            {
+                                foreach (var s in ViewBag.Site)
+                                {
+                                    <option value="@s.Id">@s.Name</option>
+                                }
+
+                            }
+                        </select>
+                    </div>
+                  
+                </div>
+                <label>Article Name</label>
+              
+                <input type="text" class="form-control" id="articlename" required="" asp-for="ArticleName" placeholder="Article Name" />
+                <label>Article URL</label>
+              
+                <input type="text" class="form-control" id="url" required asp-for="URL" placeholder="https://facebook.com" />
+                <label>Description</label>
+                <textarea type="text" class="form-control" id="des" style="height:52px; resize:none" required asp-for="Decription" placeholder="Write Article Description"></textarea>
+                <label>Tags</label>
+                <input type="text" class="form-control" id="tag" required="" asp-for="Tags" placeholder="Tags name" />
+                <label>Article Type</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <select class="form-control" asp-for="TypeId" required>
+                            <option>--Select Article Type--</option>
+                            @if (ViewBag.ArticleType != null)
+                            {
+                                foreach (var a in ViewBag.ArticleType)
+                                {
+                                    <option value="@a.Id">@a.ArticleName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                  
+                </div>
+
+                <input type="submit" id="btn" class="btn btn-primary" value="Update Article" />
+                <input type="button" class="btn btn-danger" value="Cancel" />
+               
+            </form>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,194 @@
+﻿@model IQueryable<AustraliyaDemo.Models.ArticleViewModel>
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+  
+    h1 {
+        margin: 20px 20px;
+        text-align: center
+    }
+   td img{
+        /*height:30%;*/
+        width:100%;
+   }
+       td p{
+        text-align:justify;
+    }
+    
+     #txtreport{
+              margin-top: 20px;
+     }
+</style>
+<div class="container">
+    <div class="row" id="mainDiv" >
+        
+
+        @if (Model != null)
+        {
+            foreach (var re in Model)
+            {
+               <table id="mytable">
+                   <tr>
+                        <td style="Display:none" id="articleid_@re.Id">@re.Id</td>
+                       
+                        <td><h1> @re.ArticleName</h1> </td>
+                   </tr>
+                    <tr>
+                        <td><img  src="~/SiteImages/@re.LogoPath" /></td>
+                    </tr>
+                    <tr>
+                        <td><p>@re.Description </p></td>
+                    </tr>
+                     <tr>
+                        <td> <a style="color:lime" href="@re.URL" target="_blank"> See More Details >>> </a></td>
+                     </tr>
+                    <tr>
+                        <td class="input-group mb-3">
+                            <textarea type="text" id="txtcomment_@re.Id" class="form-control" required="required" placeholder="Comments Here !" aria-label="Recipient's username" aria-describedby="button-addon2" style=" resize:none; height: 40px;"></textarea>
+                            <button type="button" class="btn btn-outline-primary" onclick="sendcomment(@re.Id)" style="color:white;margin-right: 15px;">Comment</button>
+
+                            <button type="button" class="btn btn-outline-danger"  onclick="reportmodel(@re.Id)"  style="color:white;">Report</button>
+                        </td>
+                       
+                    </tr>
+
+               </table>
+             
+               
+            }
+        }
+     
+
+    </div>
+</div>
+<div class="modal" id="myModal1" style="text-align:center;margin-top:27px;margin-left:30px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+
+                <button type="button" onclick="HideModel()" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+           <div>
+                <select id="result_comment" class='form-control' onchange="Getcomment()"> </select>
+                <input type="hidden" value="" id="commentId" />
+                <textarea type="text" id="txtreport" class="form-control" style="resize:none;" placeholder="Report here !"></textarea>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="Reportcomment()">Report</button>
+
+                </div>
+           </div>
+            
+           
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function sendcomment(id) {
+            debugger
+        //var providerContainer = $("div.row").find("input");
+            var commentId = "#txtcomment_"+id;
+            var comment = $(commentId).val();
+            var commentdata = { Comments: comment, ArticleId: id, };
+            var res = jQuery.param(commentdata);
+          $.ajax({
+                url: "/Home/Comment",
+                type: "POST",
+                data: res,
+                success: function (result) {
+                   var commentId = "#txtcomment_" + id;
+                   var comment = $(commentId).val("");
+                   alert('Successfully data');
+                 
+                }, 
+                
+            error: function () {
+                    alert('Failed to receive the Data');
+
+            }
+          });
+
+    };
+    
+    function reportmodel(id) {
+        debugger
+        $("#result_comment").html("")
+        $.ajax({
+            url: "/Home/GetCommentId",
+            type: "POST",
+            data: {"id":id},
+            success: function (result) {
+                debugger
+                $("#result_comment").append("<option>-Select Comment-</option>");
+                $('#myModal1').show();
+               
+                if (result!=null){
+                    $.each(result, function (index, val) {
+                        $("#result_comment").append("<option value=" + val.id + ">" + val.comments + "</option>");
+                        
+                    });
+                }
+            },
+            error: function () {
+                alert('Failed to receive the Data');
+            }
+        });
+    };
+
+    function HideModel(){
+       // debugger
+        $("#myModal1").hide();
+        $("#result_comment").html("")
+    };
+   
+    
+    function Getcomment(){
+        debugger
+        var cmtId = $("#result_comment option:selected").val();
+        if(cmtId)
+        {
+            $("#commentId").val(cmtId);
+        }
+    };
+
+    function Reportcomment() {
+        debugger
+        var commentid = $("#commentId").val();
+        var report = $("#txtreport").val();
+        var Reportdata = { ReportComments: report, commentid };
+        var res = jQuery.param(Reportdata);
+        $.ajax({
+            url: "/Home/ReportComment",
+            type: "POST",
+            data: res,
+            success: function (result) {
+                alert('Report Successfully. ');
+                var report = $("#txtreport").val("");
+              
+            },
+            error: function (result) {
+                alert('Failed to receive the Data');
+            }
+        })
+
+    };
+   
+</script>
+
+
+
+
+
+
+
+
+
+
+                

@@ -1,0 +1,200 @@
+﻿@model AustraliyaDemo.Entity.Article
+@{
+    ViewData["Title"] = "AddArticle";
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+<input type="hidden" id="userid" value="@ViewBag.Id" />
+<h4 style=" text-decoration: none; color: #008CBA;">AddArticle</h4>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-sm-6 box">
+            <form asp-action="AddArticle" method="post" enctype="multipart/form-data">
+                <label>Site Name</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <select class="form-control" asp-for="SiteId">
+                            <option>--Select Site Name--</option>
+                            @if (ViewBag.Sites != null)
+                            {
+                                foreach (var s in ViewBag.Sites)
+                                {
+                                    <option value="@s.Id">@s.Name</option>
+                                }
+                                
+                            }
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                        Add New Site Name
+                    </button>
+                </div>
+                <label>Article Name</label>
+                <small id="arname"></small>
+                <input type="text" class="form-control" id="articlename" required="" asp-for="ArticleName" placeholder="Article Name" />
+                <label>Article URL</label>
+                <small id="arurl"></small>
+                <input type="text" class="form-control" id="url"  required asp-for="URL" placeholder="https://facebook.com" />
+                <label>Description</label>
+                <small id="ardes"></small>
+                <textarea type="text" class="form-control" id="des" style="height: 48px; resize:none" required asp-for="Decription" placeholder="Write Article Description"></textarea>
+                <label>Tags</label>
+                <small id="artag"></small>
+                <input type="text" class="form-control" id="tag" required="" asp-for="Tags" placeholder="Tags name" />
+                <label>Article Type</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <select class="form-control" asp-for="TypeId" required>
+                            <option>--Select Article Type--</option>
+                            @if (ViewBag.ArticleType!=null)
+                            {
+                                foreach (var a in ViewBag.ArticleType)
+                                {
+                                    <option value="@a.Id">@a.ArticleName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal1">
+                        Add New Article Name
+                    </button>
+                </div>
+            
+                <input type="submit" id="btn" class="btn btn-primary" value="Add Article" />
+                <input type="button" class="btn btn-danger" value="Cancel" />
+                <input asp-for="UserId" type="hidden" class="btn btn-danger" value="@ViewBag.Id" />
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- The Modal Add Site Name-->
+<div class="modal" id="myModal" style="text-align:center;margin-top:37px;margin-left:30px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Site Name</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body  Partial View-->
+         @*   <input type="text" id="txtsitename" class="form-control">*@
+            @{
+                Html.RenderPartial("~/Views/Shared/_mypartialview.cshtml");
+            }
+            
+            <!-- Modal footer -->
+          
+
+        </div>
+    </div>
+</div>
+<!-- The Modal Article Type-->
+<div class="modal" id="myModal1" style="text-align:center;margin-top:37px;margin-left:30px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Article Type</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <small id="article1"></small>
+            <input type="text" id="txtarticlename" class="form-control" placeholder="Enter Article type name.">
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SaveArticleName()">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#btn").click(function(){
+            var articlename = $("#articlename").val();
+            var articleurl = $("#url").val();
+            var articledes = $("#des").val();
+            var articletag = $("#tag").val();
+            if(articlename==""){
+                $("#arname").text("Required*");
+                $("#arname").css("color","Red");
+                setTimeout(function () { $("#arname").hide(); },3000);
+            }
+            if (articleurl == "") {
+                $("#arurl").text("Required*");
+                $("#arurl").css("color", "Red");
+                setTimeout(function () { $("#arurl").hide(); }, 3000);
+            }
+            if (articledes == "") {
+                $("#ardes").text("Required*");
+                $("#ardes").css("color", "Red");
+                setTimeout(function () { $("#ardes").hide(); }, 3000);
+            } 
+            if (articletag == "") {
+                $("#artag").text("Required*");
+                $("#artag").css("color", "Red");
+                setTimeout(function () { $("#artag").hide(); }, 3000);
+            }
+        })
+    })
+    //function SaveSiteName() {
+    //    debugger
+    //    var sitename = $("#txtsitename").val();
+    //    window.location.href = "/Admin/AddSiteName?sitename=" + sitename;
+    //};
+    function SaveArticleName(){
+        var articlename = $("#txtarticlename").val();
+        if(articlename==""){
+            $("#article1").text("Required*");
+            $("#article1").css("color","Red");
+            setTimeout(function(){$("#article1").hide();},2000);
+        
+        }
+        else{
+            window.location.href = "/Admin/AddArticleType?articlename=" + articlename;
+        }
+       
+    } 
+  
+    //function SaveSiteName() {
+    //    debugger
+    //   var name = $('#txtsitename').val()
+    //    var country = $('#ddlcountry').val()
+    //    var url = $('#siteurl').val()
+    //    var file = $('#image_file').val()
+    //    var type = $('#ddltype').val()
+    //    var usid = $('#Usid').val()
+    //    var params = { Name: name, CountryId: country, Url: url, LogoPath: file, TypeId: type, UserId: usid, };
+       
+    //    var ser_data = jQuery.param(params);
+    //    //var fd = new FormData();
+    //    //fd.append("files", file);
+    //    //fd.append("ser_data", country);
+    //    //fd.append("Url", url);
+    //    //fd.append("LogoPath", img);
+    //    //fd.append("TypeId", type);
+    //    //fd.append("UserId", usid);
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: '/Admin/AddSite',
+    //        processData: false,
+    //        data: ser_data,
+    //        success: function (result) {
+    //            alert('Successfully data');
+               
+              
+    //        },
+    //        error: function () {
+    //            alert('Failed to receive the Data');
+              
+    //        }
+    //    })
+    //}
+  
+</script>

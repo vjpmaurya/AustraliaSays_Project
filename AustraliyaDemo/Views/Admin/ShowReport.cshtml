@@ -1,0 +1,55 @@
+﻿@model IEnumerable<AustraliyaDemo.Models.ReporViewModel>
+@{
+    ViewData["Title"] = "ShowReport";
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+
+<input type="hidden" id="userid" value="@ViewBag.Id" />
+<div class="container">
+    <div class="row">
+        <h1 class="text-center" style="text-decoration:none;color:#008cba" >Show All Report</h1>
+        <table class="table table-bordered my-4 border-success">
+            <tr style="text-align:center">
+                <th width="150px">CommentId</th>
+                <th>Comment  Name</th>
+                <th>Report</th>
+                <th width="80px">Action</th>
+            </tr>
+            @if(Model!=null)
+            {
+                foreach(var r in Model)
+                {
+                    <tr>
+                        <td style="Display:none">@r.ReportId</td>
+                        <td>@r.CommentId</td>
+                        <td>@r.CommentName</td>
+                        <td>@r.ReportName</td>
+                        <td>
+                            <a onclick="DeletReport(@r.ReportId)"><i style="color:#ff0000 ; cursor: pointer;" class="fa fa-trash"></i></a>
+                        </td>
+                        
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+
+</div>
+<script>
+    function DeletReport(id) {
+        debugger
+       var a = window.confirm("Are you sure want to delete it!")
+        if (Swal == true) {
+            $.ajax({
+                url: "../Admin/DeleteReport",
+               type: "POST",
+               data: {Id:id},
+               success:function(){
+                   alert("Deleted success")
+                    window.location.reload(true);
+               
+               }
+            })
+        }
+    }
+</script>

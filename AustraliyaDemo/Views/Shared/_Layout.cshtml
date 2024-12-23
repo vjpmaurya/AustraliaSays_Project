@@ -1,0 +1,95 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Model file-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AustraliyaDemo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AustraliyaDemo.styles.css" asp-append-version="true" />
+    <a href="~/lib/jquery/dist/jquery.min.map"></a>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+   
+</head>
+<body>
+    <header style="position:sticky;top:-1px;z-index:1061;transform:translateZ()">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom" style="background:#008CBA">
+            <div class="container-fluid" >
+             @*   <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Australiya</a>*@
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home"  asp-action="Index">Home</a>
+                        </li>
+                     
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                          <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Register">Regiateration</a>
+                        </li>
+                       
+                    </ul>
+                    @*<input class="mr-sm-2" id="searcharticle" type="search" placeholder="Search" aria-label="Search" style="padding:5px">
+                    <button class="btn btn-outline-success my-2 my-sm-0" onclick="URLSearchParams()" type="submit">Search</button>*@
+                    <div class="col-2 p-0 justify-containt-end">
+                        <form asp-action="Index" asp-controller="Home">
+                            <span class="btn-group">
+                                <input type="text"  name="searchText" id="txtsearch" placeholder="Search name !" />
+                                <input type="submit" class="p-1 ml-2 btn btn-sm  btn-outline-info" onclick="URLSearchParams()"  style="background-color:aliceblue;" value="Search" />
+                            </span>
+                        </form>
+                    </div>
+                    <div class="col-1 p-0 justify-containt-end">
+                        <a class="nav-link text-light btn-outline-info" asp-controller="Account" asp-action="Login" style="margin-left: 40px;">Login</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div style="text-align: center;margin-top: 0px; background:darkcyan; height:50px; color:white">
+            &copy; 2022 - AustraliyaDemo - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+       
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+   @* <script>
+        function URLSearchParams(){
+            debugger
+            var search = $("#searcharticle").val();
+          
+            $.ajax({
+                url: "/Home/Index",
+                type: "Get",
+                data:{Id,search} ,
+                success: function (result) {
+                   
+                }
+            })
+        }
+    </script>*@
+</body>
+</html>

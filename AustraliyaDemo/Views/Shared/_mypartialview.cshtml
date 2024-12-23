@@ -1,0 +1,70 @@
+﻿@model AustraliyaDemo.Entity.Site
+
+<form asp-action="AddSite" class="form-group" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-3"> <label>Site Name :</label></div>
+        <div class="col-md-7">
+            <input type="text" asp-for="Name" class="form-control" id="txtsitename" placeholder="Enter Site Name " />
+        </div>
+        <div class="col-md-1"></div><br /><br />
+        <div class="col-md-1"></div>
+        <div class="col-md-3"><label> Country Name :</label></div>
+        <div class="col-md-7">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <select id="ddlcountry" class="form-control" asp-for="CountryId" required>
+                        <option>--Select Country--</option>
+                        @if (ViewBag.Country != null)
+                        {
+                            foreach (var d in ViewBag.Country)
+                            {
+                                <option value="@d.Id">@d.CountryName</option>
+                            }
+                        }
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-1"></div>
+        <div class="col-md-3"> <label>Site URL :</label></div>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="siteurl" asp-for="Url" required placeholder="https://facebook.com" />
+        </div>
+        <div class="col-md-1"></div><br /><br />
+        <div class="col-md-1"></div>
+        <div class="col-md-3"><label>Site Logo :</label></div>
+        <div class="col-md-7">
+            <input type="file" asp-for="LogoPath" class="form-control" />
+        </div>
+        <div class="col-md-1"></div><br /><br />
+        <div class="col-md-1"></div>
+        <div class="col-md-3"> <label>Site Type :</label></div>
+        <div class="col-md-7">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <select id="ddltype" class="form-control" asp-for="TypeId" required>
+                        <option>--Select Type--</option>
+                        @if (ViewBag.SityTypes != null)
+                        {
+                            foreach (var s in ViewBag.SityTypes)
+                            {
+                                <option value="@s.Id">@s.SiteName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* <input type="submit" id="btn" class="btn btn-primary" value="Add Site" />
+    <input type="button" class="btn btn-danger" value="Cancel" />*@
+    <input asp-for="UserId" type="hidden" class="btn btn-danger" value="@ViewBag.Id" />
+    <input id="Usid" type="hidden" class="btn btn-danger"/>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" >Save</button>
+    </div>
+</form>

@@ -1,0 +1,174 @@
+﻿@model AustraliyaDemo.Entity.Site
+@{
+    ViewData["Title"] = "AddSite";
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+<input type="hidden" id="userid" value="@ViewBag.Id" />
+<h4 style=" text-decoration: none; color: #008CBA;">AddSite</h4>
+<input type="hidden" id="userid" value="@ViewBag.Id" />
+<div class="container">
+    <div class="row justify-content-center ">
+        <div class="col-sm-6 box">
+            <form asp-action="AddSite" method="post" enctype="multipart/form-data">
+                <label>Site Name</label>
+                <small id="sname"></small>
+                <input type="text" class="form-control" id="site" required asp-for="Name" placeholder="Enter Site Name " />
+                <label> Country Name</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <select class="form-control" asp-for="CountryId"  required>
+                            <option>--Select Country--</option>
+                            @if (ViewBag.Country!=null)
+                            {
+                                foreach (var d in ViewBag.Country) 
+                                {
+                                    <option value="@d.Id">@d.CountryName</option>
+                                }
+                            }
+                           
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                        Add New Country Name
+                    </button>
+                </div>
+                <label>Site URL</label>
+                <small id="url"></small>
+                <input type="text" class="form-control" id="siteurl" required asp-for="Url" placeholder="https://facebook.com" />
+                <label>Site Logo</label>
+                <small id="lpath"></small>
+                <input type="file" id="logo" asp-for="LogoPath" required class="form-control" />
+                <label>Site Type</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <select class="form-control" asp-for="TypeId" id="mySelect" required>
+                            <option>--Select Type--</option>
+                            @if (ViewBag.SityTypes!=null)
+                            {
+                                foreach (var s in ViewBag.SityTypes)
+                                {
+                                    <option value="@s.Id">@s.SiteName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"  data-bs-target="#myModal1">
+                       Add New Site Name
+                    </button>
+                </div>
+              
+                <input type="submit" id="btn" class="btn btn-primary" value="Add Site" />
+                <input type="button" class="btn btn-danger" value="Cancel" />
+                <input asp-for="UserId" type="hidden" class="btn btn-danger" value="@ViewBag.Id" />
+                    
+            </form>
+        </div>
+    </div>
+</div>
+<!-- The Modal Country-->
+<div class="modal" id="myModal" style="text-align:center;margin-top:37px;margin-left:30px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Country Name</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <small id="country1"></small>
+            <input type="text" id="txtcountryname" class="form-control" placeholder="Enter Country Name.">
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SaveCountryName()">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- The Modal Site Type-->
+<div class="modal" id="myModal1" style="text-align:center;margin-top:37px;margin-left:30px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Site Type</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+          <small id="site1"></small>
+            <input type="text" id="txtsitename" required  class="form-control" placeholder="Enter Site Name.">
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SaveSiteName()">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+   
+    $(document).ready(function () {
+        $("#btn").click(function () {
+            var site = $("#site").val();
+            var logo = $("#logo").val();
+            var url = $("#siteurl").val();
+            if (site == "") {
+                $("#sname").text("Required*");
+                $("#sname").css("color", "Red");
+                setTimeout(function () { $("#sname").hide(); }, 3000);
+            }
+           
+            if (logo == "") {
+                $("#lpath").text("Required*");
+                $("#lpath").css("color", "Red");
+                setTimeout(function () { $("#lpath").hide(); }, 3000);
+            }
+            if (url == "") {
+                $("#url").text("Required*");
+                $("#url").css("color", "Red");
+                setTimeout(function() { $("#url").hide(); }, 3000);
+            }
+            
+        });
+    });
+    function SaveCountryName() {
+       // debugger
+       
+        var countryname = $("#txtcountryname").val();
+        if (countryname=="") {
+            $("#country1").text("Required*");
+            $("#country1").css("color", "Red");
+            setTimeout(function () { $("#country1").hide(); }, 5000);
+        }
+        else{
+            window.location.href = "/Admin/AddCountry?countryname=" + countryname;
+        }
+        
+
+    };
+    function SaveSiteName() {
+       
+        var name = $("#txtsitename").val();
+        if(name=="")
+        {
+            $("#site1").text("Required*");
+            $("#site1").css("color","Red");
+            setTimeout(function(){$("#site1").hide();},5000);
+        }
+        else{
+            window.location.href = "/Admin/AddSiteType?name=" + name;
+        }
+      
+
+    }
+   
+</script>

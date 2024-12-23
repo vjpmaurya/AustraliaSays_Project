@@ -1,0 +1,147 @@
+﻿@model List<AustraliyaDemo.Entity.Article>
+@{
+    ViewData["Title"] = "ShowArticle";
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+    PagerModel pager = new PagerModel();
+    int PageNo = 0;
+    if(pager!=null){
+        pager = ViewBag.Pager;
+        PageNo = pager.CurrentPage;
+    }
+}
+<style>
+    a{
+        cursor: pointer;
+    }
+</style>
+<input type="hidden" id="userid" value="@ViewBag.Id" />
+<div class="container-fluid">
+    <div class="row">
+        <h3 class="text-center" style=" text-decoration: none; color: #008CBA;">Show All Articles</h3>
+        <!--Search Article name-->
+        <div class="col-8 "></div>
+        <div class="col-4 p-0 justify-containt-end">
+            <form asp-action="ShowArticle" asp-controller="Admin">
+                <span class="btn-group">
+                    <input type="text" class="form-control" name="searchText" placeholder="Search name !" />
+                    <input type="submit" class="p-1 ml-2 btn btn-sm btn-info" style="width: 150px;" value="Search" />
+                </span>
+            </form>
+
+        </div>
+        <table id="mytable" class="table table-bordered my-4 border-success table-sm">
+            <tr style="text-align:center;">
+              
+                <th>Article Name</th>
+                <th>URL</th>
+                <th>Description</th>
+                <th>Tags</th>
+                <th style="width: 82px">Action</th>
+            </tr>
+            @if(Model!=null){
+                foreach(var ar in Model)
+                {
+                    <tr style="text-align:center;">
+                        <td style="display:none">@ar.Id</td>
+                        <td>@ar.ArticleName</td>
+                        <td><a href="@ar.URL" target="_blank">@ar.URL</a></td>
+                        <td style="text-align:justify;">@ar.Decription</td>
+                        <td>@ar.Tags</td>
+                        <td style="text-align:center;">
+                            <a asp-action="EditArticle" asp-route-id="@ar.Id"><i style="color:skyblue" class="fa fa-edit"></i></a>
+                            <a onclick="DeleteArticle(@ar.Id)"><i style="color:red" class="fa fa-trash"></i></a>
+                            <a onclick="GetArticleRecord(@ar.Id)"> <i style="color:blue" class="fa fa-eye"></i></a>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+
+</div>
+<!-- The Modal Site -->
+<div class="modal" id="myModal1" style="text-align:center;">
+    <div class="modal-dialog">
+        <div class="modal-content" style=" width:650px; margin-left:-37px;margin-top: 65px;">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-decoration: none; color: #008CBA;">Get Record </h4>
+                <button type="button" onclick="HideModel()" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div id="result"></div>
+
+
+            @* <input type="text" id="txtarticlename" class="form-control">*@
+
+            <!-- Modal footer -->
+
+
+        </div>
+    </div>
+</div>
+<!-- Pagination-->
+<div class="container">
+    @if (pager.TotalPages >= 0)
+    {
+        <ul class="pagination justify-content-end">
+            <li class="page-item">
+                <a class="page-link btn btn-outline-info" asp-controller="Admin" asp-action="ShowArticle" asp-route-pg="@(pager.CurrentPage-1)">Previous</a>
+            </li>
+            @for (var pge = pager.StartPages; pge <= pager.EndPages; pge++)
+            {
+
+                @if (pge != pager.StartPages)
+                {
+                    <a class="" asp-controller="Admin" asp-action="ShowArticle" asp-route-pg="@pge"></a>
+                }
+
+            }
+            @if (pager.CurrentPage < pager.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link btn btn-outline-info" asp-controller="Admin" asp-action="ShowArticle" asp-route-pg="@(pager.CurrentPage+1)">Next</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+<script>
+    function GetArticleRecord(Id) {
+        debugger
+        $.ajax({
+            url: "../Admin/GetRocordArticle",
+            type: "POST",
+            data: { "id": Id },
+            success: function (data) {
+                debugger
+                $('#myModal1').show();
+                var res = " <table class='table table-bordered my-4 border-success'><tr><th>Name</th><th> URL </th><th> Description </th><th>Tag</th></tr><tr style='height:100px;text-align: justify;'><td>" + data.articleName + "</td><td><a href=" + data.url + ">" + data.url + "</a> </td> <td>" + data.decription + " </td><td>" + data.tags + " </td></tr></table>"
+                $("#result").html(res);
+
+            }
+        })
+
+    }
+    function HideModel() {
+        $('#myModal1').hide();
+    }
+    function DeleteArticle(id) {
+        var a = window.confirm("Are you Sure want to delete it");
+        if (a == true) {
+          //  debugger
+            $.ajax({
+                url: "../Admin/DeleteArticle",
+                type: "POST",
+                data: { Id: id },
+                success: function () {
+                    alert("Deleted success");
+                    window.location.reload(true);
+                }
+            })
+        }
+       
+    }
+</script>

@@ -1,0 +1,162 @@
+﻿@model List<AustraliyaDemo.Entity.Site>
+@{
+    ViewData["Title"] = "ShowSite";
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+    PagerModel pager = new PagerModel();
+    int pageNo = 0;
+    if (ViewBag.Pager!=null){
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+<style>
+    a{
+        color:black;
+        border-color:#008CBA;
+        cursor: pointer;
+    }
+</style>
+<input type="hidden" id="userid" value="@ViewBag.Id" />
+<div class="container-fluid">
+    <div class="row">
+        <h2 class="text-center" style=" text-decoration: none; color: #008CBA;">Show All Site</h2>
+        <!--Search site name-->
+        <div class="col-8 "></div>
+        <div class="col-4 p-0 justify-containt-end">
+            <form asp-action="ShowSite" asp-controller="Admin">
+                <span class="btn-group">
+                    <input type="text" class="form-control" name="searchText" placeholder="Search name !" />
+                    <input type="submit" class="p-1 ml-2  btn btn-sm btn-info" style="    width: 150px;" value="Search" />
+                </span>
+            </form>
+
+        </div>
+
+        <table class="table table-bordered my-4 border-success">
+            <tr style="text-align:center;">
+
+                <th>Name</th>
+                <th>URL</th>
+                <th>Image</th>
+                <th>Action</th>
+            </tr>
+            @if(Model!=null){
+            foreach (var s in Model)
+            {
+                <tr>
+                    <td style="display:none">@s.Id</td>
+                    <td>@s.Name</td>
+                    <td><a href="@s.Url" target="_blank">@s.Url</a></td>
+                    <td><img src="~/SiteImages/@s.LogoPath" height="50px" width="50px" /></td>
+                        <td style="text-align:center;">
+                            <a asp-action="EditSite" asp-route-id="@s.Id"><i style="color:skyblue" class="fa fa-edit"></i></a>
+                            <a onclick="DeleteSite(@s.Id)"><i style="color:red" class="fa fa-trash"></i></a>
+                            <a onclick="GetRecord(@s.Id)"><i style="color:blue" class="fa fa-eye"></i></a>
+                    </td>
+                       @* <td>
+                            @Html.ActionLink("Delete", "DeleteSite", new {id=@s.Id })
+                        </td>*@
+                </tr>
+            }
+            }
+            
+
+        </table>
+    </div>
+</div>
+<!-- The Modal Site -->
+<div class="modal" id="myModal1" style="text-align:center;margin-top:37px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" style=" text-decoration: none; color: #008CBA;">Get Record </h4>
+                <button type="button" onclick="HideModel()" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+           
+            <!-- Modal body -->
+           <div id="result"></div>
+           
+
+           @* <input type="text" id="txtarticlename" class="form-control">*@
+
+            <!-- Modal footer -->
+          
+
+        </div>
+    </div>
+</div>
+ <script>
+        
+    function GetRecord(Id) {
+        //debugger
+        $.ajax({
+            url: "../Admin/ViewRocord",
+            type: "POST",
+            data:{"id":Id} ,
+            success: function (data) {
+              //  debugger
+                $('#myModal1').show();
+                var res = " <table class='table table-bordered my-4 border-success' ><tr><th>Name </th><th> URL </th><th> Image </th></tr><tr style='height:100px'><td>" + data.name + "</td><td>" + data.url + " </td> <td> <img src='/SiteImages/" + data.logoPath + "' height='50px'; width='50px' /> </td></tr></table>"
+                    
+                $("#result").html(res);
+               
+            }
+        })
+
+    }
+    function HideModel(){
+        $('#myModal1').hide();
+    }
+    function DeleteSite(id) {
+        var a = window.confirm("Are you Sure want to delete it");
+        if (a == true) {
+           // debugger
+            $.ajax({
+                url: "../Admin/DeleteSite",
+                type: "POST",
+                data: { "Id": id },
+                success: function () {
+                    alert("Deleted success");
+                    window.location.reload(true);
+                }
+            })
+        }
+        else {
+            return;
+        }
+    }
+   
+
+</script>
+<div class="container">
+    @if(pager.TotalPages>=0){
+        <ul class="pagination justify-content-end">
+            @if (pager.CurrentPage < pager.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link btn btn-outline-info"  asp-controller="Admin" asp-action="ShowSite" asp-route-pg="@(pager.CurrentPage-1)">Previous</a>
+                </li>
+            }
+            @for(var pge=pager.StartPages;pge<=pager.EndPages;pge++)
+            {
+                <li class="page-item @(pge==pager.CurrentPage?"active":" ")">
+                    @if (pge != pager.StartPages)
+                    {
+                        <a class="" asp-controller="Admin" asp-action="ShowSite" asp-route-pg="@pge"></a>
+                    }
+                    else{
+                       @* <span class="page-link">@pge</span>*@
+                    }
+                   
+                </li>
+            }
+            @if(pager.CurrentPage<pager.TotalPages){
+                <li class="page-item">
+                    <a class="page-link btn btn-outline-info" asp-controller="Admin" asp-action="ShowSite" asp-route-pg="@(pager.CurrentPage+1)">Next</a>
+                </li>
+            }
+        </ul>
+    }
+</div>

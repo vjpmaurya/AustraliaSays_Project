@@ -1,0 +1,169 @@
+﻿
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+
+
+<input type="hidden" id="userid" value="@ViewBag.Id" />
+
+
+<style>
+
+
+       .mainBlock  {
+     /* background-color: #4CAF50;*/ /* Green */
+      border: none;
+      color: white;
+      padding: 12px 12px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+    }
+         .btn1  {
+      background-color: white;
+      color: black;
+      border: 2px solid #4CAF50;
+    }
+        .btn1:hover {
+      background-color: #4CAF50;
+      color: white;
+    }
+         .btn2 {
+      background-color: white;
+      color: black;
+      border: 2px solid #008CBA;
+    }
+
+     .btn2:hover {
+      background-color: #008CBA;
+      color: white;
+    }
+
+   
+   
+    .btn3 {
+      background-color: white;
+      color: black;
+      border: 2px solid #555555;
+    }
+
+    .btn3:hover {
+      background-color: #555555;
+      color: white;
+    }
+    .btn4 {
+      background-color: white;
+      color: black;
+      border: 2px solid #ff0000;
+    }
+
+    .btn4:hover {
+      background-color: #ff0000;
+      color: white;
+    }
+   
+    .box {
+        height: 3px;
+        border-radius: 5px;
+        width: 400px;
+        background: #f0ad4e;
+        margin: 0px auto;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="borders">
+            <h1 class="text-center" style=" text-decoration: none; color: #008CBA;">
+                Welcome to Dashboard
+            </h1>
+            <div class="box"></div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    
+    <div class="row my-3">
+        <div class="col">
+            <a id="AddSite1">
+                <div class="btn1 col mainBlock">
+               @* <a asp-controller="Admin" id="AddSite" asp-action="AddSite">Add Site</a>*@
+                Add Site
+                </div>
+            </a>
+        </div>
+        <div class="col">
+            <a id="ShowSite1">
+                <div class="btn2 col mainBlock">
+               Show Sites
+            </div></a>
+        </div>
+        <div class="col">
+            <a id="AddArticle1">
+                <div class="btn1 col mainBlock">
+                Add Article
+            </div></a>
+        </div>
+        <div class="col">
+            <a id="ShowArticle1">
+                <div class="btn2 col mainBlock">
+                Show Article
+                </div>
+            </a>
+        </div>
+        <div class="col">
+            <a id="ShowComment">
+                <div class="btn3 col mainBlock">
+               Show Comments
+            </div></a>
+        </div>
+        <div class="col">
+            <a id="ShowReport">
+                <div class="btn4 col mainBlock">
+                Show Report
+                </div>
+            </a>
+        </div>
+       
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        
+        $("#AddSite1").click(function () {
+            //debugger
+             usname = $("#userid").val();
+            window.location.href = "/Admin/AddSite?usname=" + usname;
+        });
+        $("#ShowSite1").click(function () {
+           // debugger
+            usname = $("#userid").val();
+            window.location.href = "/Admin/ShowSite?usname=" + usname;
+        }); 
+        $("#AddArticle1").click(function () {
+            //debugger
+            usname = $("#userid").val();
+            window.location.href = "/Admin/AddArticle?usname=" + usname;
+        });
+        $("#ShowArticle1").click(function () {
+            //debugger
+            usname = $("#userid").val();
+            window.location.href = "/Admin/ShowArticle?usname=" + usname;
+        });
+        $("#ShowComment").click(function () {
+            //debugger
+            usname = $("#userid").val();
+            window.location.href = "/Admin/ShowComment?usname=" + usname;
+        });
+        $("#ShowReport").click(function () {
+            //debugger
+            usname = $("#userid").val();
+            window.location.href = "/Admin/ShowReport?usname=" + usname;
+        });
+    })
+</script>

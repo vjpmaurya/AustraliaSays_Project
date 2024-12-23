@@ -1,0 +1,60 @@
+﻿@model IEnumerable<AustraliyaDemo.Models.CommentModel>
+@{
+    ViewData["Title"] = "ShowComment";
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<input type="hidden" id="userid" value="@ViewBag.Id" />
+<div class="container-fluid">
+    <div class="row">
+        <h3 class="text-center" style=" text-decoration: none; color: #008CBA;">Show All Comments</h3>
+        <table class="table table-bordered my-4 border-success">
+            <tr>
+                <th>Article Id</th>
+                <th>Article Name</th>
+                <th>Discription</th>
+                <th>Comment</th>
+                <th>Action</th>
+            </tr>
+            @if (Model != null)
+            {
+                foreach (var co in Model)
+                {
+                    <tr>
+                        <td style="display:none">@co.Id</td>
+                        <td>@co.ArticleId</td>
+                        <td>@co.ArticleName</td>
+                        <td style="text-align:justify">@co.Description</td>
+                        <td>@co.Commenttext</td>
+                        <td>
+                            <a onclick="Deletecomment(@co.Id)"><i style="color:red; cursor: pointer;" class="fa fa-trash"></i></a>
+                           
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+
+</div>
+
+<script>
+    function Deletecomment(id){
+        //debugger
+      var a=window.confirm("Are you sure want to delete it.")
+        if (a== true) {
+            $.ajax({
+                url: "../Admin/DeleteComment",
+                type: "POST",
+                data    : { Id: id },
+                success: function () {
+                    alert("Deleted success");
+                    window.location.reload(true);
+                }
+            })
+        }
+    }
+</script>
